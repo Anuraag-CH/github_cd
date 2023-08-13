@@ -1,30 +1,16 @@
-const mongoose = require("mongoose");
-// Define mongoose schemas
-const userSchema = new mongoose.Schema({
-    username: {type: String},
-    password: String,
-    purchasedCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }]
-  });
-  
-const adminSchema = new mongoose.Schema({
-    username: String,
-    password: String
-  });
-  
-const courseSchema = new mongoose.Schema({
-    title: String,
-    description: String,
-    price: Number,
-    imageLink: String,
-    published: Boolean
-  });
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const adminRouter = require("./routes/admin");
+const userRouter = require("./routes/user");
 
-const User = mongoose.model('User', userSchema);
-const Admin = mongoose.model('Admin', adminSchema);
-const Course = mongoose.model('Course', courseSchema);
-  
-  module.exports = {
-    User,
-    Admin,
-    Course
-  }
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.use("/admin", adminRouter)
+app.use("/user", userRouter)
+
+
+app.listen(3000, () => console.log('Server running on port 3000'));
